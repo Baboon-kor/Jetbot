@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        var keyValue = {};
+        setInterval(function () {
+            if (keyValue[37] == 'on') {
+                console.log("go left");
+            }
+
+            if (keyValue[38] == 'on') {
+                console.log("go up");
+            }
+
+            if (keyValue[39] == 'on') {
+                console.log("go right");
+            }
+
+            if (keyValue[40] == 'on') {
+                console.log("go bottom");
+
+            }
+        }, 10);
+
+        $(function () {
+            $(document).on("keydown", function (e) {
+                keyValue[e.keyCode] = 'on';
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{url_for("ajax")}}',
+                    data: JSON.stringify(e.keyCode),
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    success: function (data) {
+                        console.log('ajax 통신 성공')
+                    },
+                    error: function (request, status, error) {
+                        console.log('ajax 통신 실패')
+                    }
+                })
+            })
+
+            $(document).on("keyup", function (e) {
+                keyValue[e.keyCode] = undefined;
+                $.ajax({
+                    type: 'POST',
+                    url: '{{url_for("ajax")}}',
+                    data: JSON.stringify("undefined"),
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    success: function (data) {
+                        console.log('ajax 통신 성공')
+                    },
+                    error: function (request, status, error) {
+                        console.log('ajax 통신 실패')
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+
+<body>
+
+
+
+</body>
+
+</html>
